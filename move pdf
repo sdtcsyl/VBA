@@ -1,0 +1,36 @@
+Sub transferPDF()
+Dim fso As New FileSystemObject
+Dim myfile, fn1, fn2, fn3, fn4, fn5, fp1, fp2, fp3, fp4 As String
+Dim counter, i1, i2, i3, i4, i5 As Integer    
+fp1 = ActiveWorkbook.Path        
+fn1 = ActiveWorkbook.Name        
+fp2 = fso.GetParentFolderName(fp1)        
+counter = 0        
+myfile = Dir(fp1 & "\*.pdf")           
+Do While myfile <> ""                        
+  counter = counter + 1                                                 '<判断entity       
+  If Mid(myfile, 4, 1) = "-" Then           
+    i1 = 7        
+  ElseIf Mid(myfile, 3, 1) = "-" Then           
+    i1 = 6        
+  Else:           
+    i1 = 8        
+  End If                              '判断结束>                                                    
+    '<判断是否文件夹存在        
+  fp3 = fp2 & "\" & Left(myfile, i1)            
+  If Not fso.FolderExists(fp3) Then                
+    fp4 = fso.CreateFolder(fp3)                
+    fso.MoveFile fp1 & "\" & myfile, fp3 & "\" & myfile            
+    Else:                
+    fso.MoveFile fp1 & "\" & myfile, fp3 & "\" & myfile           
+  End If                              '文件转移完毕>                        
+  myfile = Dir                
+  If myfile = "" Then                        
+    Exit Do               
+  End If            
+  '        If counter > 20 Then
+  ''             Exit Do
+  ''        End If        
+Loop        
+MsgBox counter & " pdf have been transfered"        
+End Sub
